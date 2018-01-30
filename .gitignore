@@ -10,6 +10,8 @@
 /build
 /dist
 
+database.json
+
 # misc
 .DS_Store
 .env.local
