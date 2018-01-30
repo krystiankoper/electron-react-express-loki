@@ -22,13 +22,28 @@ module.exports = (db) => ({
       }
     });
   }),
+  put: (id, user) => new Promise((resolve, reject) => {
+    db.loadDatabase({}, () => {
+      try {
+        const users = db.getCollection(collection);
+        const result = users.findOne({ id: parseInt(id, 10) });
+        const updatedUser = Object.assign({}, result, user);
+        users.update(updatedUser);
+        db.saveDatabase();
+        resolve(updatedUser);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }),
   post: (user) => new Promise((resolve, reject) => {
     db.loadDatabase({}, () => {
       try {
         const users = db.getCollection(collection);
+        user.id = users.maxId + 1;
         users.insert(user);
         db.saveDatabase();
-        resolve(users);
+        resolve(user);
       } catch (err) {
         reject(err);
       }

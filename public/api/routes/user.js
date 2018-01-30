@@ -7,7 +7,9 @@ module.exports = (app, db) => {
 
   app.get('/user/:id', (req, res) => userServiceInstance.getById(req.params.id).then(obj => res.send(obj)));
 
+  app.put('/user/:id', (req, res) => userServiceInstance.put(req.params.id, req.body).then(obj => res.send(obj)));
+
   app.post('/user', (req, res) => userServiceInstance.post(req.body).then(obj => res.send(obj.data)));
 
-  app.delete('/user/:id', (req, res) => userServiceInstance.getById(req.params.id).then(obj => res.send(obj.data)));
+  app.delete('/user/:id', (req, res) => userServiceInstance.getById(req.params.id).then(obj => res.send(obj)));
 };
