@@ -2,7 +2,6 @@ const checkIfCollectionExists = (db, collectionName) => db.getCollection(collect
 
 const addCollection = (db, collectionName) => {
   db.addCollection(collectionName);
-  db.saveDatabase();
 };
 
 const loadDatabase = (config, db) => {

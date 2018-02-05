@@ -1,6 +1,5 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
-const url = require('url');
 const isDev = require('electron-is-dev');
 const server = require('./api/server');
 
@@ -13,7 +12,7 @@ const createWindow = () => {
   app.server = server;
   mainWindow = new BrowserWindow({ width: 800, height: 600 });
   mainWindow.loadURL(isDev ? devPath : prodPath);
-  mainWindow.on('closed', () => mainWindow = null);
+  mainWindow.on('closed', () => { mainWindow = null; });
 };
 
 app.on('ready', createWindow);

@@ -10,6 +10,10 @@
 /build
 /dist
 
+# css
+*.css
+
+#database
 database.json
 
 # misc
