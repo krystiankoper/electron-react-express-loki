@@ -7,7 +7,7 @@ import Form from './index';
 
 const mockStore = configureStore();
 
-describe('<Users />', () => {
+describe('<UserForm />', () => {
   it('render', async () => {
     const div = document.createElement('div');
     const getUser = await Promise.resolve();
