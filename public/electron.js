@@ -13,7 +13,6 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({ width: 800, height: 600 });
   mainWindow.loadURL(isDev ? devPath : prodPath);
   mainWindow.on('closed', () => { mainWindow = null; });
-  mainWindow.webContents.openDevTools();
 };
 
 app.on('ready', createWindow);

@@ -32,19 +32,15 @@ class User extends Component {
   }
 
   submit = (user) => {
-    this.checkUserAndFetch(user)
-      .then(() => this.backToUsersList);
-  }
-
-  backToUsersList = () => {
     const { history } = this.props;
-    history.push('/');
+    this.checkUserAndFetch(user)
+      .then(() => history.push('/'));
   }
 
   render() {
-    const { user } = this.props;
+    const { user, history } = this.props;
     return (
-      <UserForm user={user} submit={this.submit} cancel={this.backToUsersList} />
+      <UserForm user={user} submit={this.submit} cancel={() => history.push('/')} />
     );
   }
 }
