@@ -1,7 +1,7 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
-const server = require('./server');
+const server = require('./api/server');
 
 const devPath = 'http://localhost:3000';
 const prodPath = `file://${path.join(__dirname, '../build/index.html')}`;
@@ -13,6 +13,7 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({ width: 800, height: 600 });
   mainWindow.loadURL(isDev ? devPath : prodPath);
   mainWindow.on('closed', () => { mainWindow = null; });
+  mainWindow.webContents.openDevTools();
 };
 
 app.on('ready', createWindow);

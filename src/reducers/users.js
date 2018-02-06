@@ -33,6 +33,7 @@ export default function (state = initialState, action) {
       const { payload: { data } } = action;
       return {
         ...state,
+        isLoading: false,
         users: [...data],
       };
     }
