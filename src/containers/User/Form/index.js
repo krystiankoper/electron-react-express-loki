@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 import {
   getUser,
@@ -33,15 +32,19 @@ class User extends Component {
   }
 
   submit = (user) => {
-    const { history } = this.props;
     this.checkUserAndFetch(user)
-      .then(() => history.push('/'));
+      .then(() => this.backToUsersList);
+  }
+
+  backToUsersList = () => {
+    const { history } = this.props;
+    history.push('/');
   }
 
   render() {
     const { user } = this.props;
     return (
-      <UserForm user={user} submit={this.submit} />
+      <UserForm user={user} submit={this.submit} cancel={this.backToUsersList} />
     );
   }
 }

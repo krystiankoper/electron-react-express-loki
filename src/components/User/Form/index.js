@@ -1,14 +1,11 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 const FormItem = Form.Item;
 
-const CancelButton = styled(({ className }) => (
-  <Link to="/">
-    <Button className={className}>Cancel</Button>
-  </Link>
+const CancelButton = styled(({ className, cancel }) => (
+  <Button className={className} cancel={cancel}>Cancel</Button>
 ))`
   margin-left: 8px;
 `;
@@ -36,7 +33,7 @@ const UserForm = Form.create({
     };
   },
 })((props) => {
-  const { form } = props;
+  const { form, cancel } = props;
   const { getFieldDecorator } = form;
   const formItemLayout = {
     labelCol: {
@@ -129,7 +126,7 @@ const UserForm = Form.create({
       </FormItem>
       <FormItem {...tailFormItemLayout}>
         <Button type="primary" htmlType="submit">Save</Button>
-        <CancelButton />
+        <CancelButton onClick={cancel} />
       </FormItem>
     </Form>
   );

@@ -5,6 +5,7 @@ import {
   UPDATE_USER_SUCCESS,
   CREATE_USER_SUCCESS,
   DELETE_USER_SUCCESS,
+  FETCH_USERS,
 } from '../constants/actionTypes';
 
 export const userInitialState = {
@@ -14,13 +15,20 @@ export const userInitialState = {
   phone: '',
 };
 
-const initialState = {
+export const initialState = {
   users: [],
   user: userInitialState,
+  isLoading: false,
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case FETCH_USERS: {
+      return {
+        ...state,
+        isLoading: true,
+      };
+    }
     case FETCH_USERS_SUCCESS: {
       const { payload: { data } } = action;
       return {
@@ -41,6 +49,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         user,
+        isLoading: false,
       };
     }
     case DELETE_USER_SUCCESS: {

@@ -9,7 +9,7 @@ import {
 
 import { API_USER_PATH } from '../constants/constants';
 
-export const getUsers = () => dispatch => dispatch({
+export const getUsers = () => ({
   type: FETCH_USERS,
   payload: {
     request: {
@@ -19,7 +19,7 @@ export const getUsers = () => dispatch => dispatch({
   },
 });
 
-export const getUser = id => dispatch => dispatch({
+export const getUser = id => ({
   type: FETCH_USER,
   payload: {
     request: {
@@ -29,22 +29,22 @@ export const getUser = id => dispatch => dispatch({
   },
 });
 
-export const newUser = () => dispatch => dispatch({
+export const newUser = () => ({
   type: NEW_USER,
 });
 
-export const createUser = data => dispatch => dispatch({
+export const createUser = data => ({
   type: CREATE_USER,
   payload: {
     request: {
       method: 'POST',
-      url: `${API_USER_PATH}`,
+      url: API_USER_PATH,
       data,
     },
   },
 });
 
-export const updateUser = data => dispatch => dispatch({
+export const updateUser = data => ({
   type: UPDATE_USER,
   payload: {
     request: {
@@ -55,7 +55,7 @@ export const updateUser = data => dispatch => dispatch({
   },
 });
 
-export const deleteUser = id => dispatch => dispatch({
+export const deleteUser = id => ({
   type: DELETE_USER,
   payload: {
     request: {

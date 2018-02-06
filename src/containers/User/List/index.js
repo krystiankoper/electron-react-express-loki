@@ -9,21 +9,10 @@ import { getUsers, deleteUser } from '../../../actions/users';
 import { DELETE_USER_CONFIR_TEXT } from '../../../constants/constants';
 
 class Users extends Component {
-  state = {
-    isLoading: true,
-  }
-
   componentDidMount() {
     const { getUsers: getUsersAction } = this.props;
-    getUsersAction()
-      .then(() => this.setLoading())
-      .catch(() => this.setLoading());
+    getUsersAction();
   }
-
-  setLoading = (isLoading = false) => {
-    this.setState({ isLoading });
-  }
-
 
   deleteItemHandler = (id) => {
     const { deleteUser: deleteUserAction } = this.props;
@@ -31,8 +20,7 @@ class Users extends Component {
   }
 
   render() {
-    const { isLoading } = this.state;
-    const { users } = this.props;
+    const { users, isLoading } = this.props;
 
     return (
       <Aux>
@@ -54,10 +42,12 @@ Users.propTypes = {
   getUsers: PropTypes.func.isRequired,
   users: PropTypes.arrayOf(PropTypes.object).isRequired,
   deleteUser: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
   users: state.userStore.users,
+  isLoading: state.userStore.isLoading,
 });
 
 const mapDispatchToProps = {
