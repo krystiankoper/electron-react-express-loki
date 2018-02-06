@@ -1,8 +1,13 @@
 # electron-react-express-loki
 
-Electron / React / ExpressJS / LokiJS boilerplate
+Electron / React / ExpressJS / LokiJS boilerplate for cross-platform desktop apps
 
-Simple desktop CRUD application with local database (based on LokiJS)
+Simple user management app with local database (based on LokiJS)
+
+## Electron
+
+[https://electronjs.org/docs/tutorial/quick-start](Electron quick start)
+
 
 For React app used:
 - React Router

@@ -1,7 +1,7 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
-const server = require('./api/server');
+const server = require('./server');
 
 const devPath = 'http://localhost:3000';
 const prodPath = `file://${path.join(__dirname, '../build/index.html')}`;
