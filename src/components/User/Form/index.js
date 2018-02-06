@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const FormItem = Form.Item;
 
 const CancelButton = styled(({ className, cancel }) => (
-  <Button className={className} cancel={cancel}>Cancel</Button>
+  <Button className={className} onClick={cancel}>Cancel</Button>
 ))`
   margin-left: 8px;
 `;
@@ -126,7 +126,7 @@ const UserForm = Form.create({
       </FormItem>
       <FormItem {...tailFormItemLayout}>
         <Button type="primary" htmlType="submit">Save</Button>
-        <CancelButton onClick={cancel} />
+        <CancelButton cancel={cancel} />
       </FormItem>
     </Form>
   );
