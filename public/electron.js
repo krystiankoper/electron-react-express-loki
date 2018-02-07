@@ -5,6 +5,10 @@ const { autoUpdater } = require('electron-updater');
 const notifier = require('node-notifier');
 const log = require('electron-log');
 
+log.transports.file.format = '{h}:{i}:{s}:{ms} {text}';
+log.transports.file.maxSize = 5 * 1024 * 1024;
+log.transports.file.level = 'info';
+
 const server = require('./api/server');
 
 const devPath = 'http://localhost:3000';
