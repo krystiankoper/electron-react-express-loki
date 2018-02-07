@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
+const server = require('./api/server');
 const { autoUpdater } = require('electron-updater');
 const notifier = require('node-notifier');
 const log = require('electron-log');
@@ -9,66 +10,55 @@ log.transports.file.format = '{h}:{i}:{s}:{ms} {text}';
 log.transports.file.maxSize = 5 * 1024 * 1024;
 log.transports.file.level = 'info';
 
-const server = require('./api/server');
-
 const devPath = 'http://localhost:3000';
 const prodPath = `file://${path.join(__dirname, '../build/index.html')}`;
 
 let mainWindow;
 
-function sendStatusToWindow(text) {
+const simpleNotify = (text) => {
   log.info(text);
-  mainWindow.webContents.send('message', text);
-}
-autoUpdater.on('checking-for-update', () => {
-  sendStatusToWindow('Checking for update...');
-})
-autoUpdater.on('update-available', (info) => {
-  sendStatusToWindow('Update available.');
-})
-autoUpdater.on('update-not-available', (info) => {
-  sendStatusToWindow('Update not available.');
-})
-autoUpdater.on('error', (err) => {
-  sendStatusToWindow('Error in auto-updater. ' + err);
-})
-autoUpdater.on('download-progress', (progressObj) => {
-  let log_message = "Download speed: " + progressObj.bytesPerSecond;
-  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-  sendStatusToWindow(log_message);
-})
-autoUpdater.on('update-downloaded', (info) => {
-  sendStatusToWindow('Update downloaded');
-});
+  notifier.notify(text);
+};
 
-// const showUpdateNotification = (e = {}) => {
-//   const restartNowAction = 'Restart now';
+const updateConfirmation = (e) => {
+  const restartNowAction = 'Restart now';
+  const versionLabel = e.label ? `Version ${e.version}` : 'The latest version';
+  notifier.notify(
+    {
+      title: 'A new update is ready to install.',
+      message: `${versionLabel} has been downloaded and will be automatically installed after restart.`,
+      closeLabel: 'Okay',
+      actions: restartNowAction,
+    },
+    (err, response, metadata) => {
+      if (err) throw err;
+      if (metadata.activationValue !== restartNowAction) {
+        return;
+      }
+      autoUpdater.quitAndInstall();
+    },
+  );
+};
 
-//   const versionLabel = e.label ? `Version ${e.version}` : 'The latest version';
-
-//   notifier.notify(
-//     {
-//       title: 'A new update is ready to install.',
-//       message: `${versionLabel} has been downloaded and will be automatically installed after restart.`,
-//       closeLabel: 'Okay',
-//       actions: restartNowAction,
-//     },
-//     (err, response, metadata) => {
-//       if (err) throw err;
-//       if (metadata.activationValue !== restartNowAction) {
-//         return;
-//       }
-//       autoUpdater.quitAndInstall();
-//     },
-//   );
-// };
+autoUpdater.on('update-available', () => simpleNotify('Update available.'));
+autoUpdater.on('error', err => simpleNotify(`Error in auto-updater. ${err}`));
+autoUpdater.on('download-progress', progressObj =>
+  simpleNotify(`
+  Download speed: ${progressObj.bytesPerSecond} - 
+  Downloaded ${progressObj.percent}% 
+  (${progressObj.transferred}/${progressObj.total})
+  `));
+autoUpdater.on('update-downloaded', e => updateConfirmation(e));
 
 const initAutoUpdater = () => {
+  if (isDev) {
+    return;
+  }
+
   if (process.platform === 'linux') {
     return;
   }
-  log.info('updates');
+  log.info('run update');
   autoUpdater.checkForUpdatesAndNotify();
 };
 
@@ -77,7 +67,6 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({ width: 800, height: 600 });
   mainWindow.loadURL(isDev ? devPath : prodPath);
   mainWindow.on('closed', () => { mainWindow = null; });
-  log.info('Hello, log');
   initAutoUpdater();
 };
 
