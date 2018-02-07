@@ -49,6 +49,7 @@ const initAutoUpdater = () => {
 const createWindow = () => {
   app.server = server;
   mainWindow = new BrowserWindow({ width: 800, height: 600 });
+  mainWindow.webContents.openDevTools();
   mainWindow.loadURL(isDev ? devPath : prodPath);
   mainWindow.on('closed', () => { mainWindow = null; });
   initAutoUpdater();
