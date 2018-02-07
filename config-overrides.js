@@ -6,7 +6,7 @@ module.exports = function override(config, env) {
   config = injectBabelPlugin(['import', { libraryName: 'antd', style: true }], config);
   // eslint-disable-next-line no-param-reassign
   config = rewireLess.withLoaderOptions({
-    modifyVars: { '@primary-color': '#00d664' },
+    modifyVars: { '@primary-color': '#FF0000' },
   })(config, env);
   return config;
 };
