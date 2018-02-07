@@ -1,22 +1,21 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
-const server = require('./api/server');
 const { autoUpdater } = require('electron-updater');
 const notifier = require('node-notifier');
+
+const server = require('./api/server');
 
 const devPath = 'http://localhost:3000';
 const prodPath = `file://${path.join(__dirname, '../build/index.html')}`;
 
 let mainWindow;
 
-const simpleNotify = (text) => {
-  notifier.notify(text);
-};
-
-const updateConfirmation = (e) => {
+const showUpdateNotification = (e = {}) => {
   const restartNowAction = 'Restart now';
+
   const versionLabel = e.label ? `Version ${e.version}` : 'The latest version';
+
   notifier.notify(
     {
       title: 'A new update is ready to install.',
@@ -34,18 +33,6 @@ const updateConfirmation = (e) => {
   );
 };
 
-autoUpdater.on('checking-for-update', () => simpleNotify('Checking for update...'));
-autoUpdater.on('update-available', () => simpleNotify('Update available.'));
-autoUpdater.on('update-not-available', () => simpleNotify('Update not available.'));
-autoUpdater.on('error', err => simpleNotify(`Error in auto-updater. ${err}`));
-autoUpdater.on('download-progress', progressObj =>
-  simpleNotify(`
-  Download speed: ${progressObj.bytesPerSecond} - 
-  Downloaded ${progressObj.percent}% 
-  (${progressObj.transferred}/${progressObj.total})
-  `));
-autoUpdater.on('update-downloaded', e => updateConfirmation(e));
-
 const initAutoUpdater = () => {
   if (isDev) {
     return;
@@ -56,6 +43,7 @@ const initAutoUpdater = () => {
   }
 
   autoUpdater.checkForUpdates();
+  autoUpdater.signals.updateDownloaded(showUpdateNotification);
 };
 
 const createWindow = () => {
