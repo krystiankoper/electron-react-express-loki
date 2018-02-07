@@ -1,15 +1,17 @@
 import React from 'react';
 import { Route, Router } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { createMemoryHistory } from 'history';
 
 import asyncComponent from './hocs/asyncComponent';
 import Aux from './hocs/aux';
 import Layout from './components/UI/Layout';
 import Users from './containers/User/List';
 
+const history = createMemoryHistory('begin-path');
+
 const asyncUserForm = asyncComponent(() => import('./containers/User/Form'));
 
-const App = ({ history }) => (
+const App = () => (
   <Layout>
     <Router history={history}>
       <Aux>
@@ -20,9 +22,5 @@ const App = ({ history }) => (
     </Router>
   </Layout>
 );
-
-App.propTypes = {
-  history: PropTypes.shape().isRequired,
-};
 
 export default App;
