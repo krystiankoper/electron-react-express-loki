@@ -3,7 +3,6 @@ const path = require('path');
 const isDev = require('electron-is-dev');
 const server = require('./api/server');
 const { autoUpdater } = require('electron-updater');
-const notifier = require('node-notifier');
 const log = require('electron-log');
 
 log.transports.file.format = '{h}:{i}:{s}:{ms} {text}';
@@ -15,54 +14,37 @@ const prodPath = `file://${path.join(__dirname, '../build/index.html')}`;
 
 let mainWindow;
 
-function sendStatusToWindow(text) {
-
+const sendStatusToWindow = (text) => {
   log.info(text);
-
   mainWindow.webContents.send('message', text);
-
-}
+};
 
 autoUpdater.on('checking-for-update', () => {
-
   sendStatusToWindow('Checking for update...');
+});
 
-})
-
-autoUpdater.on('update-available', (info) => {
-
+autoUpdater.on('update-available', () => {
   sendStatusToWindow('Update available.');
+});
 
-})
-
-autoUpdater.on('update-not-available', (info) => {
-
+autoUpdater.on('update-not-available', () => {
   sendStatusToWindow('Update not available.');
-
-})
+});
 
 autoUpdater.on('error', (err) => {
-
-  sendStatusToWindow('Error in auto-updater. ' + err);
-
-})
+  sendStatusToWindow(`Error in auto-updater. ${err}`);
+});
 
 autoUpdater.on('download-progress', (progressObj) => {
+  sendStatusToWindow(`
+  Download speed: ${progressObj.bytesPerSecond} - 
+  Downloaded ${progressObj.percent}% 
+  (${progressObj.transferred}/${progressObj.total})
+  `);
+});
 
-  let log_message = "Download speed: " + progressObj.bytesPerSecond;
-
-  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-
-  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-
-  sendStatusToWindow(log_message);
-
-})
-
-autoUpdater.on('update-downloaded', (info) => {
-
+autoUpdater.on('update-downloaded', () => {
   sendStatusToWindow('Update downloaded');
-
 });
 
 const initAutoUpdater = () => {
@@ -73,7 +55,6 @@ const initAutoUpdater = () => {
   if (process.platform === 'linux') {
     return;
   }
-  log.info('run update');
   autoUpdater.checkForUpdatesAndNotify();
 };
 
