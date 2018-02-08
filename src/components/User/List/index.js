@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { List, Button, Popconfirm } from 'antd';
 import styled from 'styled-components';
 
-import Aux from '../../../hocs/aux';
+import Aux from '../../../hocs/auxiliary';
 import UserLink from '../Link';
 
 const userList = (props) => {

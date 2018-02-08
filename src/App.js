@@ -3,7 +3,7 @@ import { Route, Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 
 import asyncComponent from './hocs/asyncComponent';
-import Aux from './hocs/aux';
+import Aux from './hocs/auxiliary';
 import Layout from './components/UI/Layout';
 import Users from './containers/User/List';
 

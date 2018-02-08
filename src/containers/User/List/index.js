@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Spin } from 'antd';
 
-import Aux from '../../../hocs/aux';
+import Aux from '../../../hocs/auxiliary';
 import List from '../../../components/User/List';
 import { getUsers, deleteUser } from '../../../actions/users';
 import { DELETE_USER_CONFIR_TEXT } from '../../../constants/constants';
