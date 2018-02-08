@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow } = require('electron'); // eslint-disable-line import/no-extraneous-dependencies
 const path = require('path');
 const isDev = require('electron-is-dev');
 const server = require('./api/server');
