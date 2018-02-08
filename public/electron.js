@@ -19,25 +19,7 @@ function sendStatusToWindow(text) {
 
   log.info(text);
 
-  win.webContents.send('message', text);
-
-}
-
-function createDefaultWindow() {
-
-  win = new BrowserWindow();
-
-  win.webContents.openDevTools();
-
-  win.on('closed', () => {
-
-    win = null;
-
-  });
-
-  win.loadURL(`file://${__dirname}/version.html#v${app.getVersion()}`);
-
-  return win;
+  mainWindow.webContents.send('message', text);
 
 }
 
