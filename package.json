@@ -1,6 +1,6 @@
 {
   "name": "electron-react-express-loki",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "private": true,
   "description": "A minimal user management Electron application with Express API, LokiJS database and ReactJS",
   "keywords": [

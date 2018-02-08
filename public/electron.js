@@ -15,40 +15,73 @@ const prodPath = `file://${path.join(__dirname, '../build/index.html')}`;
 
 let mainWindow;
 
-const simpleNotify = (text) => {
+function sendStatusToWindow(text) {
+
   log.info(text);
-  notifier.notify(text);
-};
 
-const updateConfirmation = (e) => {
-  const restartNowAction = 'Restart now';
-  const versionLabel = e.label ? `Version ${e.version}` : 'The latest version';
-  notifier.notify(
-    {
-      title: 'A new update is ready to install.',
-      message: `${versionLabel} has been downloaded and will be automatically installed after restart.`,
-      closeLabel: 'Okay',
-      actions: restartNowAction,
-    },
-    (err, response, metadata) => {
-      if (err) throw err;
-      if (metadata.activationValue !== restartNowAction) {
-        return;
-      }
-      autoUpdater.quitAndInstall();
-    },
-  );
-};
+  win.webContents.send('message', text);
 
-autoUpdater.on('update-available', () => simpleNotify('Update available.'));
-autoUpdater.on('error', err => simpleNotify(`Error in auto-updater. ${err}`));
-autoUpdater.on('download-progress', progressObj =>
-  simpleNotify(`
-  Download speed: ${progressObj.bytesPerSecond} - 
-  Downloaded ${progressObj.percent}% 
-  (${progressObj.transferred}/${progressObj.total})
-  `));
-autoUpdater.on('update-downloaded', e => updateConfirmation(e));
+}
+
+function createDefaultWindow() {
+
+  win = new BrowserWindow();
+
+  win.webContents.openDevTools();
+
+  win.on('closed', () => {
+
+    win = null;
+
+  });
+
+  win.loadURL(`file://${__dirname}/version.html#v${app.getVersion()}`);
+
+  return win;
+
+}
+
+autoUpdater.on('checking-for-update', () => {
+
+  sendStatusToWindow('Checking for update...');
+
+})
+
+autoUpdater.on('update-available', (info) => {
+
+  sendStatusToWindow('Update available.');
+
+})
+
+autoUpdater.on('update-not-available', (info) => {
+
+  sendStatusToWindow('Update not available.');
+
+})
+
+autoUpdater.on('error', (err) => {
+
+  sendStatusToWindow('Error in auto-updater. ' + err);
+
+})
+
+autoUpdater.on('download-progress', (progressObj) => {
+
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+
+  sendStatusToWindow(log_message);
+
+})
+
+autoUpdater.on('update-downloaded', (info) => {
+
+  sendStatusToWindow('Update downloaded');
+
+});
 
 const initAutoUpdater = () => {
   if (isDev) {
